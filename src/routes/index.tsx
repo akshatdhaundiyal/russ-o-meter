@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { CelebrationOverlay } from "@/components/CelebrationOverlay";
 import { Confetti } from "@/components/Confetti";
@@ -9,6 +11,7 @@ import { PitchCard } from "@/components/PitchCard";
 import { SideNav } from "@/components/SideNav";
 import { ValuationCounter } from "@/components/ValuationCounter";
 import { generatePitch } from "@/lib/pitch";
+import { generatePitchAI } from "@/lib/pitch.functions";
 
 const TITLE = "Russ-O-Meter — Turn BS Into Billions";
 const DESCRIPTION =
@@ -38,7 +41,9 @@ function Index() {
   const [tags, setTags] = useState<string[]>(DEFAULT_TAGS);
   const [celebrating, setCelebrating] = useState(false);
   const [burst, setBurst] = useState(0);
+  const [loading, setLoading] = useState(false);
   const rafRef = useRef(0);
+  const askAI = useServerFn(generatePitchAI);
 
   // Intro count-up to $1,000,000,000
   useEffect(() => {
@@ -58,11 +63,22 @@ function Index() {
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  const inflate = () => {
-    const result = generatePitch(idea);
-    setPitch(result.pitch);
-    setTags(result.tags);
-    setValuation((v) => (v === 0 ? 5_000_000 : Math.floor(v * 1.7)));
+  const inflate = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const result = await askAI({ data: { idea } });
+      setPitch(result.pitch);
+      if (result.tags.length) setTags(result.tags);
+    } catch {
+      const fallback = generatePitch(idea);
+      setPitch(fallback.pitch);
+      setTags(fallback.tags);
+      toast.error("The AI analyst is out to lunch — using the buzzword generator.");
+    } finally {
+      setLoading(false);
+      setValuation((v) => (v === 0 ? 5_000_000 : Math.floor(v * 1.7)));
+    }
   };
 
   const addComma = () => {
@@ -140,11 +156,15 @@ function Index() {
         <section className="mx-auto mb-12 grid w-full max-w-4xl grid-cols-1 gap-4 md:mb-16 md:grid-cols-2 md:gap-6">
           <button
             onClick={inflate}
-            className="glow-blue label-caps group relative flex items-center justify-center overflow-hidden rounded-xl bg-cyan py-5 text-on-cyan transition-all duration-300 active:scale-95 md:py-6"
+            disabled={loading}
+            className="glow-blue label-caps group relative flex items-center justify-center overflow-hidden rounded-xl bg-cyan py-5 text-on-cyan transition-all duration-300 active:scale-95 disabled:opacity-70 md:py-6"
           >
             <span className="relative z-10 flex items-center tracking-widest">
-              Hyper-Inflate Pitch
-              <Icon name="rocket_launch" className="ml-2 text-lg" />
+              {loading ? "Inflating…" : "Hyper-Inflate Pitch"}
+              <Icon
+                name={loading ? "progress_activity" : "rocket_launch"}
+                className={`ml-2 text-lg ${loading ? "animate-spin" : ""}`}
+              />
             </span>
             <div className="absolute inset-0 -translate-x-full -skew-x-12 bg-white/20 transition-transform duration-700 ease-in-out group-hover:translate-x-full" />
           </button>
