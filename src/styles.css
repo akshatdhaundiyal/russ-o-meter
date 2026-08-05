@@ -62,26 +62,38 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
+  --radius: 0.75rem;
+  /* Veblen-tech dark palette */
+  --background: oklch(0.16 0.02 260);
+  --foreground: oklch(0.92 0.004 285);
+  --card: oklch(0.19 0.02 260);
+  --card-foreground: oklch(0.92 0.004 285);
+  --popover: oklch(0.19 0.02 260);
+  --popover-foreground: oklch(0.92 0.004 285);
+  --primary: oklch(0.9 0.16 100);
+  --primary-foreground: oklch(0.3 0.08 95);
+  --secondary: oklch(0.26 0.02 260);
+  --secondary-foreground: oklch(0.92 0.004 285);
+  --muted: oklch(0.26 0.02 260);
+  --muted-foreground: oklch(0.72 0.01 270);
+  --accent: oklch(0.82 0.14 199);
+  --accent-foreground: oklch(0.3 0.06 200);
+  --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --border: oklch(0.92 0.004 285 / 10%);
+  --input: oklch(0.92 0.004 285 / 15%);
+  --ring: oklch(0.82 0.14 199);
+  /* Brand raw values */
+  --gold: #ffe16d;
+  --gold-dim: #e9c400;
+  --cyan: #00dce6;
+  --cyan-bright: #6ff6ff;
+  --on-gold: #3a3000;
+  --on-cyan: #002022;
+  --abyss: #0b0f17;
+  --surface-high: #2a2a2a;
+  --outline: #909096;
+  --outline-variant: #45474b;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -95,6 +107,22 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+}
+
+@theme {
+  --color-gold: var(--gold);
+  --color-gold-dim: var(--gold-dim);
+  --color-cyan: var(--cyan);
+  --color-cyan-bright: var(--cyan-bright);
+  --color-on-gold: var(--on-gold);
+  --color-on-cyan: var(--on-cyan);
+  --color-abyss: var(--abyss);
+  --color-surface-high: var(--surface-high);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --font-display: "Sora", sans-serif;
+  --font-caps: "Space Grotesk", sans-serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
 }
 
 .dark {
@@ -138,7 +166,62 @@
   }
 
   body {
-    background-color: var(--color-background);
+    background-color: var(--abyss);
+    background-image:
+      radial-gradient(circle at 50% 0%, rgba(0, 220, 230, 0.13) 0%, transparent 55%),
+      radial-gradient(circle at 50% 100%, rgba(255, 225, 109, 0.09) 0%, transparent 55%);
+    background-attachment: fixed;
     color: var(--color-foreground);
+    font-family: var(--font-body);
+    min-height: 100vh;
   }
+}
+
+@utility glass-panel {
+  background: rgba(11, 15, 23, 0.6);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+@utility glow-gold {
+  box-shadow: 0 0 30px rgba(255, 225, 109, 0.2);
+  &:hover {
+    box-shadow: 0 0 40px rgba(255, 225, 109, 0.4);
+  }
+}
+
+@utility glow-blue {
+  box-shadow: 0 0 30px rgba(0, 220, 230, 0.2);
+  &:hover {
+    box-shadow: 0 0 40px rgba(0, 220, 230, 0.4);
+  }
+}
+
+@utility text-gradient-gold {
+  background: linear-gradient(135deg, #fff9ef 0%, #ffe16d 50%, #e9c400 100%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility veblen-input {
+  background: rgba(11, 15, 23, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-foreground);
+  transition: all 0.3s ease;
+  &:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px rgba(0, 220, 230, 0.3);
+    outline: none;
+  }
+}
+
+@utility label-caps {
+  font-family: var(--font-caps);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
 }
