@@ -5,7 +5,7 @@ export function Icon({
 }: {
   name: string;
   className?: string;
-  filled?: boolean;
+  filled?: boolean | undefined;
 }) {
   return (
     <span
