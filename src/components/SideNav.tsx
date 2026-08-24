@@ -1,62 +1,89 @@
+import { NavTab, VCPersonaId } from "@/lib/types";
 import { Icon } from "./Icon";
+import { VC_PERSONAS } from "@/lib/pitch";
+import { sound } from "@/lib/audio";
 
-const AVATAR =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCkYL75zyffkBFSs8R2BvNqqk4YoR9POVqBzEbKxKLOcCS1gBjbbe_VGS9LlRjHf3ZK9A7lQJCq61Tpka5y5Zpkbe8dYEkgvI06Pf-w9jVM2xfffst6JuKBzivYCG9gRuU5zHUTpIJkVvK64ehuFOHKuPGJPeEQNbo3RvYv4bOFgWzy57JySymzouc6px0YXmFmjWcglU7GYPMfxHNxVj8elpnxCRH1kmTSLqOwBnZoMYweb3V0pzg6";
-
-const items = [
-  { icon: "rocket_launch", label: "Hype Engine", active: true },
-  { icon: "show_chart", label: "Valuation Lab" },
-  { icon: "local_fire_department", label: "Burn Rate" },
-  { icon: "diamond", label: "LP Dashboard" },
+const NAV_ITEMS: { id: NavTab; icon: string; label: string }[] = [
+  { id: "hype", icon: "rocket_launch", label: "Hype Engine" },
+  { id: "valuation-lab", icon: "science", label: "Valuation Lab" },
+  { id: "burn-rate", icon: "local_fire_department", label: "Burn Rate" },
+  { id: "lp-dashboard", icon: "diamond", label: "LP Dashboard" },
+  { id: "pitch-battle", icon: "sports_kabaddi", label: "Pitch Battle 🥊" },
 ];
 
-export function SideNav({ onPitch }: { onPitch: () => void }) {
+interface SideNavProps {
+  activeTab: NavTab;
+  onTabChange: (tab: NavTab) => void;
+  activePersonaId: VCPersonaId;
+  onPitch: () => void;
+  onOpenSettings: () => void;
+}
+
+export function SideNav({
+  activeTab,
+  onTabChange,
+  activePersonaId,
+  onPitch,
+  onOpenSettings,
+}: SideNavProps) {
+  const currentPersona = VC_PERSONAS.find((p) => p.id === activePersonaId) ?? VC_PERSONAS[0]!;
+
   return (
     <nav className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col space-y-6 border-r border-white/5 bg-black/40 py-6 shadow-[10px_0_30px_rgba(0,0,0,0.5)] backdrop-blur-2xl md:flex">
-      <div className="flex flex-col items-center border-b border-white/5 px-6 pb-4 pt-8">
+      <div className="flex flex-col items-center border-b border-white/5 px-6 pb-4 pt-6 text-center">
         <img
-          alt="Principal VC avatar"
-          className="mb-4 h-20 w-20 rounded-full border-2 border-gold object-cover shadow-[0_0_20px_rgba(255,225,109,0.3)]"
-          src={AVATAR}
+          alt={currentPersona.name}
+          className="mb-3 h-20 w-20 rounded-full border-2 border-gold object-cover shadow-[0_0_20px_rgba(255,225,109,0.3)]"
+          src={currentPersona.avatar}
           loading="lazy"
         />
-        <h2 className="label-caps text-gold">Series A+ Only</h2>
-        <p className="label-caps mt-1 text-[10px] text-cyan">Unicorn Hunter Mode</p>
+        <h2 className="label-caps text-xs text-gold font-bold">{currentPersona.name}</h2>
+        <p className="label-caps mt-0.5 text-[10px] text-cyan">{currentPersona.badge}</p>
       </div>
 
-      <div className="flex-1 space-y-2 px-4">
-        {items.map((item) => (
-          <a
-            key={item.label}
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            className={
-              item.active
-                ? "flex items-center rounded-lg border-r-4 border-cyan bg-cyan/10 px-4 py-3 text-cyan transition-all duration-200"
-                : "flex items-center rounded-lg px-4 py-3 text-outline transition-all duration-200 hover:bg-surface-high hover:text-foreground"
-            }
-          >
-            <Icon name={item.icon} className="mr-4" filled={item.active} />
-            <span className="label-caps tracking-widest">{item.label}</span>
-          </a>
-        ))}
+      <div className="flex-1 space-y-1.5 px-4">
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => {
+                sound.playPop();
+                onTabChange(item.id);
+              }}
+              className={`flex w-full items-center rounded-xl px-4 py-3 text-left transition-all duration-200 ${
+                isActive
+                  ? "border-r-4 border-cyan bg-cyan/10 font-bold text-cyan shadow-sm"
+                  : "text-muted-foreground hover:bg-surface-high hover:text-foreground"
+              }`}
+            >
+              <Icon name={item.icon} className="mr-3 text-lg" filled={isActive} />
+              <span className="label-caps tracking-wider text-xs">{item.label}</span>
+            </button>
+          );
+        })}
       </div>
 
-      <div className="px-4 pb-8">
+      <div className="px-4 pb-4">
         <button
-          onClick={onPitch}
-          className="glow-gold label-caps w-full rounded-lg bg-gold py-3 text-on-gold transition-all duration-300"
+          onClick={() => {
+            onTabChange("hype");
+            onPitch();
+          }}
+          className="glow-gold label-caps w-full rounded-xl bg-gold py-3 text-xs font-bold text-on-gold transition-all duration-300 active:scale-95"
         >
-          Pitch Now
+          Pitch Now 🚀
         </button>
-        <a
-          href="#"
-          onClick={(e) => e.preventDefault()}
-          className="mt-4 flex items-center rounded-lg px-4 py-3 text-outline transition-all duration-200 hover:bg-surface-high hover:text-foreground"
+        <button
+          onClick={() => {
+            sound.playPop();
+            onOpenSettings();
+          }}
+          className="mt-3 flex w-full items-center rounded-xl px-4 py-2.5 text-muted-foreground transition-all hover:bg-surface-high hover:text-foreground"
         >
-          <Icon name="settings" className="mr-4" />
-          <span className="label-caps tracking-widest">Settings</span>
-        </a>
+          <Icon name="settings" className="mr-3 text-base" />
+          <span className="label-caps text-xs tracking-widest">Settings</span>
+        </button>
       </div>
     </nav>
   );
