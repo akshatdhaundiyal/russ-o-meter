@@ -1,14 +1,21 @@
-# Welcome to your Lovable project
+# Russ-o-meter
+
+Build this app using the HTML files referenced below. You can hotlink the images referenced in the HTML. The attached images are screenshots of the desired screens. Here are public links to the html of the screens which you should read and use to build the app:
+
+1. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1ODQ5Njc4OGZkNWEwNTAzYzE3MzI4MDU3ZDVjEgsSBxDy54_7qBkYAZIBIwoKcHJvamVjdF9pZBIVQhMyOTIwNTQzNzYxMjMwMTE1Mjgw&filename=&opi=89354086
+2. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1ODQ5NjZjYjgzNjQwOTM0ZjE2MjJkMDFjODI2EgsSBxDy54_7qBkYAZIBIwoKcHJvamVjdF9pZBIVQhMyOTIwNTQzNzYxMjMwMTE1Mjgw&filename=&opi=89354086
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://russ-o-meter.lovable.app
+
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/1479bbc4-c66f-48f9-a6c5-8ea918a00145).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +27,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
